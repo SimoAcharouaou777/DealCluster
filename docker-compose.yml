@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: dealcluster
+      POSTGRES_USER: progresssoft
+      POSTGRES_PASSWORD: progresssoft
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_NAME: dealcluster
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: progresssoft
+      DB_PASS: progresssoft
+    ports:
+      - "8080:8080"
+
+    restart: on-failure
+
+volumes:
+  dbdata:
